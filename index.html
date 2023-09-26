@@ -79,12 +79,12 @@
 
     <!-- Add a new div to display the full verse -->
     <div id="fullVerse" style="display: none;"></div>
+    <p id="feedback"></p>
         <br><br>
         <button onclick="checkAnswers()" style="background-color: green;">Submit</button>
         <button onclick="toggleShowAnswer()" id="showAnswerButton" style="background-color: orange;">Show Answer</button>
         <button onclick="loadNewVerse()">New Verse ></button>
         <button onclick="toggleLanguage()" style="background-color: pink;">Toggle Language (ENG/KOR)</button>
-        <p id="feedback"></p>
     </div>
 
     <script>
@@ -149,7 +149,12 @@
                 let randomIndex = Math.floor(Math.random() * words.length);
                 if (!indicesBlanked.includes(randomIndex)) {
                     indicesBlanked.push(randomIndex);
-                    words[randomIndex] = `<input type="text" data-answer="${words[randomIndex]}" style="width:100px;">`;
+
+                    // Check if the word contains punctuation and add it accordingly
+                    const word = words[randomIndex];
+                    const wordWithoutPunctuation = word.replace(/[^a-zA-Z]+/g, '');
+
+                    words[randomIndex] = `<input type="text" data-answer="${wordWithoutPunctuation}" style="width:100px;">`;
                 }
             }
 
@@ -165,6 +170,7 @@
 
             return result;
         }
+
 
         // Add a variable to keep track of whether the full verse is displayed
         let isFullVerseDisplayed = false;
@@ -213,11 +219,22 @@
         }
 
         function loadNewVerse() {
+            // Hide the answer div
+            document.getElementById('fullVerse').style.display = 'none';
+
+            // Reset the "Show Answer" button text
+            document.getElementById('showAnswerButton').innerText = 'Show Answer';
+
+            // Reset the full verse display state
+            isFullVerseDisplayed = false;
+
             fetch('verses.json').then(response => response.json()).then(data => {
                 currentVerse = getRandomVerse(data);
                 displayVerse(currentVerse);
             });
         }
+
+
 
         function toggleLanguage() {
     // Check if the full verse is displayed and hide it if necessary
