@@ -67,6 +67,11 @@
             font-weight: bold;
             margin-top: 20px;
         }
+        .answerHighlight {
+    margin-left: 5px;
+    color: red;
+    font-weight: bold;
+}
     </style>
 </head>
 
@@ -83,6 +88,7 @@
         <br><br>
         <button onclick="checkAnswers()" style="background-color: green;">Submit</button>
         <button onclick="toggleShowAnswer()" id="showAnswerButton" style="background-color: orange;">Show Answer</button>
+        <button onclick="regenerateBlanks()" style="background-color: red;">Try Same Verse Again</button>
         <button onclick="loadNewVerse()">New Verse ></button>
         <button onclick="toggleLanguage()" style="background-color: pink;">Toggle Language (ENG/KOR)</button>
     </div>
@@ -99,6 +105,21 @@
         function getRandomVerse(verses) {
             return verses[Math.floor(Math.random() * verses.length)];
         }
+
+        function regenerateBlanks() {
+            // Hide the answer div
+            document.getElementById('fullVerse').style.display = 'none';
+
+            // Reset the "Show Answer" button text
+            document.getElementById('showAnswerButton').innerText = 'Show Answer';
+
+            // Reset the full verse display state
+            isFullVerseDisplayed = false;
+
+            // Display the current verse with new blanks
+            displayVerse(currentVerse);
+        }
+
 
         function displayVerse(verse) {
             document.getElementById('verseReference').innerText = verse[currentLanguage].reference;
@@ -147,7 +168,8 @@
             let indicesBlanked = [];
             while (indicesBlanked.length < numToBlank) {
                 let randomIndex = Math.floor(Math.random() * words.length);
-                if (!indicesBlanked.includes(randomIndex)) {
+                
+                if (!indicesBlanked.includes(randomIndex) && words[randomIndex] !== '--') {
                     indicesBlanked.push(randomIndex);
 
                     // Check if the word contains punctuation and add it accordingly
@@ -172,28 +194,44 @@
         }
 
 
+
         // Add a variable to keep track of whether the full verse is displayed
         let isFullVerseDisplayed = false;
 
         function toggleShowAnswer() {
-            const fullVerseDiv = document.getElementById('fullVerse');
+            const inputs = document.querySelectorAll('input[data-answer]');
             const showAnswerButton = document.getElementById('showAnswerButton');
-            const fullVerseText = currentVerse[currentLanguage].verse;
 
             if (isFullVerseDisplayed) {
-                // If the full verse is currently displayed, hide it
-                fullVerseDiv.style.display = 'none';
+                // If the answers are currently displayed, hide them
+                removeHighlightedAnswers();
                 showAnswerButton.innerText = 'Show Answer';
             } else {
-                // If the full verse is not displayed, show it
-                fullVerseDiv.innerText = fullVerseText;
-                fullVerseDiv.style.display = 'block';
+                // If the answers are not displayed, show them
+                inputs.forEach(input => {
+                    const answerSpan = document.createElement('span');
+                    answerSpan.className = 'answerHighlight';
+                    answerSpan.innerText = ` (${input.getAttribute('data-answer')}) `;
+                    answerSpan.style.backgroundColor = 'yellow'; // Highlighting the answer
+                    input.parentNode.insertBefore(answerSpan, input.nextSibling);
+                });
                 showAnswerButton.innerText = 'Hide Answer';
             }
 
-            // Toggle the state of the full verse display
+            // Toggle the state of the answer display
             isFullVerseDisplayed = !isFullVerseDisplayed;
         }
+
+        function removeHighlightedAnswers() {
+            const inputs = document.querySelectorAll('input[data-answer]');
+            inputs.forEach(input => {
+                if (input.nextSibling && input.nextSibling.className === 'answerHighlight') {
+                    input.nextSibling.remove();
+                }
+            });
+        }
+
+
 
 
         function checkAnswers() {
@@ -237,10 +275,9 @@
 
 
         function toggleLanguage() {
-    // Check if the full verse is displayed and hide it if necessary
-    const fullVerseDiv = document.getElementById('fullVerse');
-    if (fullVerseDiv.style.display === 'block') {
-        fullVerseDiv.style.display = 'none';
+    // Check if the full verse is displayed and hide the highlights if necessary
+    if (isFullVerseDisplayed) {
+        removeHighlightedAnswers();
         document.getElementById('showAnswerButton').innerText = 'Show Answer';
         isFullVerseDisplayed = false;
     }
@@ -249,6 +286,7 @@
     currentLanguage = currentLanguage === 'english' ? 'korean' : 'english';
     displayVerse(currentVerse);
 }
+
 
     </script>
 
