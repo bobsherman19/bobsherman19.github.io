@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,7 +22,7 @@
             background-color: #ffffff;
             border-radius: 10px;
             padding: 40px;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
         }
 
         button {
@@ -46,77 +47,169 @@
             margin: 0 5px;
         }
 
+        input[type="text"].correct {
+            border-color: green;
+            background-color: lightgreen;
+        }
+
+        input[type="text"].incorrect {
+            border-color: red;
+            background-color: lightcoral;
+        }
+
         #verseReference {
             font-weight: bold;
             font-size: 1.2em;
             margin-bottom: 20px;
         }
 
+        #feedback {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
     </style>
 </head>
+
 <body>
 
-<div>
-    <h2>Fill in the Blanks</h2>
-    <p id="verseReference"></p>
-    <div id="verseContent"></div>
-    <br><br>
-    <button onclick="showAnswer()">Show Answer</button>
-    <button onclick="loadNewVerse()">New Verse</button>
-    <button onclick="toggleLanguage()">Toggle Language (ENG/KOR)</button>
-</div>
-<script>
-  let currentLanguage = 'english';
-    let currentVerse = null;
+    <div>
+        <h2>Fill in the Blanks</h2>
+        <p id="verseReference"></p>
+        <div id="verseContent"></div>
+        <br><br>
+        <button onclick="checkAnswers()" style="background-color: green;">Submit</button>
+        <button onclick="showAnswer()" style="background-color: orange;">Show Answer</button>
+        <button onclick="loadNewVerse()">New Verse ></button>
+        <button onclick="toggleLanguage()" style="background-color: pink;">Toggle Language (ENG/KOR)</button>
+        <p id="feedback"></p>
+    </div>
+    <script>
+        let currentLanguage = 'english';
+        let currentVerse = null;
 
-    fetch('verses.json').then(response => response.json()).then(data => {
-        currentVerse = getRandomVerse(data);
-        displayVerse(currentVerse);
-    });
-
-    function getRandomVerse(verses) {
-        return verses[Math.floor(Math.random() * verses.length)];
-    }
-
-    function displayVerse(verse) {
-        document.getElementById('verseReference').innerText = verse[currentLanguage].reference;
-        document.getElementById('verseContent').innerHTML = blankOutWordsRandomly(verse[currentLanguage].verse);
-    }
-
-    function blankOutWordsRandomly(verse) {
-        let words = verse.split(' ');
-        let numToBlank = Math.floor(words.length * 0.2);  // blank out roughly 20% of words
-
-        let indicesBlanked = [];
-        while(indicesBlanked.length < numToBlank) {
-            let randomIndex = Math.floor(Math.random() * words.length);
-            if(!indicesBlanked.includes(randomIndex)) {
-                indicesBlanked.push(randomIndex);
-                words[randomIndex] = `<input type="text" data-answer="${words[randomIndex]}" style="width:100px;">`;
-            }
-        }
-        return words.join(' ');
-    }
-
-    function showAnswer() {
-        const inputs = document.querySelectorAll('input[data-answer]');
-        inputs.forEach(input => {
-            input.value = input.getAttribute('data-answer');
-        });
-    }
-
-    function loadNewVerse() {
         fetch('verses.json').then(response => response.json()).then(data => {
             currentVerse = getRandomVerse(data);
             displayVerse(currentVerse);
         });
-    }
 
-    function toggleLanguage() {
-        currentLanguage = currentLanguage === 'english' ? 'korean' : 'english';
-        displayVerse(currentVerse);
-    }
-</script>
+        function getRandomVerse(verses) {
+            return verses[Math.floor(Math.random() * verses.length)];
+        }
+
+        function displayVerse(verse) {
+            document.getElementById('verseReference').innerText = verse[currentLanguage].reference;
+            if (verse[currentLanguage] === 'english'){
+                document.getElementById('verseContent').innerHTML = blankOutWordsRandomlyENG(verse[currentLanguage].verse);
+            }
+            else{
+                document.getElementById('verseContent').innerHTML = blankOutWordsRandomlyKOR(verse[currentLanguage].verse);
+            }
+
+            // Reset feedback and input fields
+            document.getElementById('feedback').innerText = '';
+            const inputs = document.querySelectorAll('input[data-answer]');
+            inputs.forEach(input => {
+                input.style.borderColor = "#007BFF"; // Restore default border color
+                input.classList.remove('correct', 'incorrect');
+                input.value = '';
+            });
+        }
+
+        function blankOutWordsRandomlyKOR(verse) {
+            let words = verse.split(' ');
+            let numToBlank = Math.floor(words.length * 0.2); // blank out roughly 20% of words
+
+            let indicesBlanked = [];
+            while (indicesBlanked.length < numToBlank) {
+                let randomIndex = Math.floor(Math.random() * words.length);
+                if (!indicesBlanked.includes(randomIndex)) {
+                    indicesBlanked.push(randomIndex);
+                    words[randomIndex] = `<input type="text" data-answer="${words[randomIndex]}" style="width:100px;">`;
+                }
+            }
+            return words.join(' ');
+        }
+        
+        function blankOutWordsRandomlyENG(verse) {
+            // Split the verse into words and punctuation
+            let wordsAndPunctuation = verse.match(/(\w+|\W+)/g);
+
+            // Extract words and punctuation into separate arrays
+            let words = wordsAndPunctuation.filter(item => /[a-zA-Z]/.test(item));
+            let punctuation = wordsAndPunctuation.filter(item => !/[a-zA-Z]/.test(item));
+
+            let numToBlank = Math.floor(words.length * 0.2); // blank out roughly 20% of words
+
+            let indicesBlanked = [];
+            while (indicesBlanked.length < numToBlank) {
+                let randomIndex = Math.floor(Math.random() * words.length);
+                if (!indicesBlanked.includes(randomIndex)) {
+                    indicesBlanked.push(randomIndex);
+                    words[randomIndex] = `<input type="text" data-answer="${words[randomIndex]}" style="width:100px;">`;
+                }
+            }
+
+            // Combine words and punctuation back together
+            let result = '';
+            for (let i = 0; i < wordsAndPunctuation.length; i++) {
+                if (/[a-zA-Z]/.test(wordsAndPunctuation[i])) {
+                    result += words.shift();
+                } else {
+                    result += wordsAndPunctuation[i];
+                }
+            }
+
+            return result;
+        }
+
+// Example usage:
+let verse = "Share, your thoughts with others!";
+console.log(blankOutWordsRandomly(verse));
+
+
+        function showAnswer() {
+            const inputs = document.querySelectorAll('input[data-answer]');
+            inputs.forEach(input => {
+                input.value = input.getAttribute('data-answer');
+            });
+        }
+
+        function checkAnswers() {
+            const inputs = document.querySelectorAll('input[data-answer]');
+            let correctCount = 0;
+
+            inputs.forEach(input => {
+                const userAnswer = input.value.trim().toLowerCase();
+                const correctAnswer = input.getAttribute('data-answer').trim().toLowerCase();
+
+                if (userAnswer === correctAnswer) {
+                    correctCount++;
+                    input.classList.add('correct');
+                    input.classList.remove('incorrect');
+                } else {
+                    input.classList.add('incorrect');
+                    input.classList.remove('correct');
+                }
+            });
+
+            // Display the number of correct answers in the feedback area
+            document.getElementById('feedback').innerText = `You got ${correctCount} out of ${inputs.length} right!`;
+        }
+
+        function loadNewVerse() {
+            fetch('verses.json').then(response => response.json()).then(data => {
+                currentVerse = getRandomVerse(data);
+                displayVerse(currentVerse);
+            });
+        }
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'english' ? 'korean' : 'english';
+            displayVerse(currentVerse);
+        }
+    </script>
 
 </body>
+
 </html>
