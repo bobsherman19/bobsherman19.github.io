@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bible Verse Quiz</title>
     <style>
-        html, body {
+        html,
+        body {
             margin: 0;
             padding: 0;
         }
@@ -67,27 +68,30 @@
             font-weight: bold;
             margin-top: 20px;
         }
+
         .answerHighlight {
-    margin-left: 5px;
-    color: red;
-    font-weight: bold;
-}
+            margin-left: 5px;
+            color: red;
+            font-weight: bold;
+        }
     </style>
 </head>
 
 <body>
 
     <div>
+        <span>
+            Pick a verse: <select id="verseSelector" onchange="selectVerse()"></select>
+        </span>
         <h2>Fill in the Blanks</h2>
         <p id="verseReference"></p>
         <div id="verseContent"></div>
-
-    <!-- Add a new div to display the full verse -->
-    <div id="fullVerse" style="display: none;"></div>
-    <p id="feedback"></p>
+        <div id="fullVerse" style="display: none;"></div>
+        <p id="feedback"></p>
         <br><br>
         <button onclick="checkAnswers()" style="background-color: green;">Submit</button>
-        <button onclick="toggleShowAnswer()" id="showAnswerButton" style="background-color: orange;">Show Answer</button>
+        <button onclick="toggleShowAnswer()" id="showAnswerButton" style="background-color: orange;">Show
+            Answer</button>
         <button onclick="regenerateBlanks()" style="background-color: red;">Try Same Verse Again</button>
         <button onclick="loadNewVerse()">New Verse ></button>
         <button onclick="toggleLanguage()" style="background-color: pink;">Toggle Language (ENG/KOR)</button>
@@ -96,11 +100,47 @@
     <script>
         let currentLanguage = 'english';
         let currentVerse = null;
+        let versesList = []; // Create a global variable to store all verses
 
         fetch('verses.json').then(response => response.json()).then(data => {
+            versesList = data; // Store all the verses
+            populateVerseDropdown(data);
             currentVerse = getRandomVerse(data);
+            setDropdownToCurrentVerse();
             displayVerse(currentVerse);
         });
+
+        function setDropdownToCurrentVerse() {
+            const dropdown = document.getElementById('verseSelector');
+            const selectedIndex = versesList.findIndex(verse =>
+                verse[currentLanguage].reference === currentVerse[currentLanguage].reference
+            );
+
+            dropdown.selectedIndex = selectedIndex;
+        }
+
+
+
+
+        function populateVerseDropdown(verses) {
+            const dropdown = document.getElementById('verseSelector');
+            verses.forEach((verse, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.innerText = verse.english.reference;
+                dropdown.appendChild(option);
+            });
+            dropdown.selectedIndex = 0; // Ensure first option is selected
+            selectVerse(); // Display the first verse after populating the dropdown
+        }
+
+
+        function selectVerse() {
+            const dropdown = document.getElementById('verseSelector');
+            const selectedIndex = dropdown.value;
+            currentVerse = versesList[selectedIndex];
+            displayVerse(currentVerse);
+        }
 
         function getRandomVerse(verses) {
             return verses[Math.floor(Math.random() * verses.length)];
@@ -123,10 +163,10 @@
 
         function displayVerse(verse) {
             document.getElementById('verseReference').innerText = verse[currentLanguage].reference;
-            if (verse[currentLanguage] === 'english'){
+            if (verse[currentLanguage] === 'english') {
                 document.getElementById('verseContent').innerHTML = blankOutWordsRandomlyENG(verse[currentLanguage].verse);
             }
-            else{
+            else {
                 document.getElementById('verseContent').innerHTML = blankOutWordsRandomlyKOR(verse[currentLanguage].verse);
             }
 
@@ -154,7 +194,7 @@
             }
             return words.join(' ');
         }
-        
+
         function blankOutWordsRandomlyENG(verse) {
             // Split the verse into words and punctuation
             let wordsAndPunctuation = verse.match(/(\w+|\W+)/g);
@@ -168,7 +208,7 @@
             let indicesBlanked = [];
             while (indicesBlanked.length < numToBlank) {
                 let randomIndex = Math.floor(Math.random() * words.length);
-                
+
                 if (!indicesBlanked.includes(randomIndex) && words[randomIndex] !== '--') {
                     indicesBlanked.push(randomIndex);
 
@@ -266,26 +306,43 @@
             // Reset the full verse display state
             isFullVerseDisplayed = false;
 
-            fetch('verses.json').then(response => response.json()).then(data => {
-                currentVerse = getRandomVerse(data);
-                displayVerse(currentVerse);
-            });
+            currentVerse = getRandomVerse(versesList); // Directly use the stored versesList, no need to fetch again
+            setDropdownToCurrentVerse(); // Set dropdown to the new verse
+            displayVerse(currentVerse);
         }
 
 
 
-        function toggleLanguage() {
-    // Check if the full verse is displayed and hide the highlights if necessary
-    if (isFullVerseDisplayed) {
-        removeHighlightedAnswers();
-        document.getElementById('showAnswerButton').innerText = 'Show Answer';
-        isFullVerseDisplayed = false;
-    }
 
-    // Toggle the language
-    currentLanguage = currentLanguage === 'english' ? 'korean' : 'english';
-    displayVerse(currentVerse);
-}
+        function toggleLanguage() {
+            if (currentLanguage === 'english') {
+                currentLanguage = 'korean';
+                changeDropdownOptions('korean');
+            } else {
+                currentLanguage = 'english';
+                changeDropdownOptions('english');
+            }
+            setDropdownToCurrentVerse();
+            displayVerse(currentVerse);
+        }
+
+        function changeDropdownOptions(language) {
+            const dropdown = document.getElementById('verseSelector');
+            dropdown.innerHTML = '';  // Clear existing options
+
+            versesList.forEach((verse, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+
+                if (language === 'english') {
+                    option.innerText = verse.english.reference;
+                } else if (language === 'korean') {
+                    option.innerText = verse.korean.reference;
+                }
+
+                dropdown.appendChild(option);
+            });
+        }
 
 
     </script>
