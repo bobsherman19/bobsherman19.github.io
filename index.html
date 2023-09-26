@@ -67,7 +67,6 @@
             font-weight: bold;
             margin-top: 20px;
         }
-
     </style>
 </head>
 
@@ -77,13 +76,17 @@
         <h2>Fill in the Blanks</h2>
         <p id="verseReference"></p>
         <div id="verseContent"></div>
+
+    <!-- Add a new div to display the full verse -->
+    <div id="fullVerse" style="display: none;"></div>
         <br><br>
         <button onclick="checkAnswers()" style="background-color: green;">Submit</button>
-        <button onclick="showAnswer()" style="background-color: orange;">Show Answer</button>
+        <button onclick="toggleShowAnswer()" id="showAnswerButton" style="background-color: orange;">Show Answer</button>
         <button onclick="loadNewVerse()">New Verse ></button>
         <button onclick="toggleLanguage()" style="background-color: pink;">Toggle Language (ENG/KOR)</button>
         <p id="feedback"></p>
     </div>
+
     <script>
         let currentLanguage = 'english';
         let currentVerse = null;
@@ -163,17 +166,29 @@
             return result;
         }
 
-// Example usage:
-let verse = "Share, your thoughts with others!";
-console.log(blankOutWordsRandomly(verse));
+        // Add a variable to keep track of whether the full verse is displayed
+        let isFullVerseDisplayed = false;
 
+        function toggleShowAnswer() {
+            const fullVerseDiv = document.getElementById('fullVerse');
+            const showAnswerButton = document.getElementById('showAnswerButton');
+            const fullVerseText = currentVerse[currentLanguage].verse;
 
-        function showAnswer() {
-            const inputs = document.querySelectorAll('input[data-answer]');
-            inputs.forEach(input => {
-                input.value = input.getAttribute('data-answer');
-            });
+            if (isFullVerseDisplayed) {
+                // If the full verse is currently displayed, hide it
+                fullVerseDiv.style.display = 'none';
+                showAnswerButton.innerText = 'Show Answer';
+            } else {
+                // If the full verse is not displayed, show it
+                fullVerseDiv.innerText = fullVerseText;
+                fullVerseDiv.style.display = 'block';
+                showAnswerButton.innerText = 'Hide Answer';
+            }
+
+            // Toggle the state of the full verse display
+            isFullVerseDisplayed = !isFullVerseDisplayed;
         }
+
 
         function checkAnswers() {
             const inputs = document.querySelectorAll('input[data-answer]');
@@ -205,9 +220,19 @@ console.log(blankOutWordsRandomly(verse));
         }
 
         function toggleLanguage() {
-            currentLanguage = currentLanguage === 'english' ? 'korean' : 'english';
-            displayVerse(currentVerse);
-        }
+    // Check if the full verse is displayed and hide it if necessary
+    const fullVerseDiv = document.getElementById('fullVerse');
+    if (fullVerseDiv.style.display === 'block') {
+        fullVerseDiv.style.display = 'none';
+        document.getElementById('showAnswerButton').innerText = 'Show Answer';
+        isFullVerseDisplayed = false;
+    }
+
+    // Toggle the language
+    currentLanguage = currentLanguage === 'english' ? 'korean' : 'english';
+    displayVerse(currentVerse);
+}
+
     </script>
 
 </body>
