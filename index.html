@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bible Verse Quiz</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 40px;
+            background-color: #f5f7f9;
+        }
+
+        div {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+
+        button {
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        input[type="text"] {
+            border: 2px solid #007BFF;
+            border-radius: 5px;
+            padding: 5px;
+            margin: 0 5px;
+        }
+
+        #verseReference {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div>
+    <h2>Fill in the Blanks</h2>
+    <p id="verseReference"></p>
+    <div id="verseContent"></div>
+    <br><br>
+    <button onclick="showAnswer()">Show Answer</button>
+    <button onclick="loadNewVerse()">New Verse</button>
+    <button onclick="toggleLanguage()">Toggle Language (ENG/KOR)</button>
+</div>
+<script>
+  let currentLanguage = 'english';
+    let currentVerse = null;
+
+    fetch('verses.json').then(response => response.json()).then(data => {
+        currentVerse = getRandomVerse(data);
+        displayVerse(currentVerse);
+    });
+
+    function getRandomVerse(verses) {
+        return verses[Math.floor(Math.random() * verses.length)];
+    }
+
+    function displayVerse(verse) {
+        document.getElementById('verseReference').innerText = verse[currentLanguage].reference;
+        document.getElementById('verseContent').innerHTML = blankOutWordsRandomly(verse[currentLanguage].verse);
+    }
+
+    function blankOutWordsRandomly(verse) {
+        let words = verse.split(' ');
+        let numToBlank = Math.floor(words.length * 0.2);  // blank out roughly 20% of words
+
+        let indicesBlanked = [];
+        while(indicesBlanked.length < numToBlank) {
+            let randomIndex = Math.floor(Math.random() * words.length);
+            if(!indicesBlanked.includes(randomIndex)) {
+                indicesBlanked.push(randomIndex);
+                words[randomIndex] = `<input type="text" data-answer="${words[randomIndex]}" style="width:100px;">`;
+            }
+        }
+        return words.join(' ');
+    }
+
+    function showAnswer() {
+        const inputs = document.querySelectorAll('input[data-answer]');
+        inputs.forEach(input => {
+            input.value = input.getAttribute('data-answer');
+        });
+    }
+
+    function loadNewVerse() {
+        fetch('verses.json').then(response => response.json()).then(data => {
+            currentVerse = getRandomVerse(data);
+            displayVerse(currentVerse);
+        });
+    }
+
+    function toggleLanguage() {
+        currentLanguage = currentLanguage === 'english' ? 'korean' : 'english';
+        displayVerse(currentVerse);
+    }
+</script>
+
+</body>
+</html>
