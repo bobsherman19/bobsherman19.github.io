@@ -140,17 +140,24 @@
 
 
         function selectVerse() {
-            const fullVerseElement = document.getElementById('fullVerse');
-            const verseContentElement = document.getElementById('verseContent');
-            toggleFullVerseButton.innerText = 'Practice full verse';
-            fullVerseElement.style.display = 'none';
-            verseContentElement.style.display = 'block';
-            isFullVerseDisplayed = false;
             const dropdown = document.getElementById('verseSelector');
             const selectedIndex = dropdown.value;
             currentVerse = versesList[selectedIndex];
-            displayVerse(currentVerse);
+            displayVerse(currentVerse);  // First, display the verse
+            
+            // Then, check the display state and adjust accordingly
+            const fullVerseElement = document.getElementById('fullVerse');
+            const verseContentElement = document.getElementById('verseContent');
+            if (isFullVerseDisplayed) {
+                fullVerseElement.style.display = 'block';
+                verseContentElement.style.display = 'none';
+                fullVerseElement.innerText = currentVerse[currentLanguage].verse;
+            } else {
+                fullVerseElement.style.display = 'none';
+                verseContentElement.style.display = 'block';
+            }
         }
+
 
         function getRandomVerse(verses) {
             return verses[Math.floor(Math.random() * verses.length)];
