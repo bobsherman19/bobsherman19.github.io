@@ -74,6 +74,12 @@
             color: red;
             font-weight: bold;
         }
+
+        button:disabled, button:disabled:hover {
+            background-color: #cccccc;
+            color: #888888;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 
@@ -92,7 +98,8 @@
         <button onclick="checkAnswers()" style="background-color: green;">Submit</button>
         <button onclick="toggleShowAnswer()" id="showAnswerButton" style="background-color: orange;">Show
             Answer</button>
-        <button onclick="regenerateBlanks()" style="background-color: red;">Try Same Verse Again</button>
+        <button onclick="regenerateBlanks()" style="background-color: red;" id="sameVerse">Try Same Verse Again</button>
+        <button onclick="toggleFullVerse()" id="toggleFullVerseButton" style="background-color: purple;">Practice full verse</button>
         <button onclick="loadNewVerse()">New Verse ></button>
         <button onclick="toggleLanguage()" style="background-color: pink;">Toggle Language (ENG/KOR)</button>
     </div>
@@ -133,6 +140,12 @@
 
 
         function selectVerse() {
+            const fullVerseElement = document.getElementById('fullVerse');
+            const verseContentElement = document.getElementById('verseContent');
+            toggleFullVerseButton.innerText = 'Practice full verse';
+            fullVerseElement.style.display = 'none';
+            verseContentElement.style.display = 'block';
+            isFullVerseDisplayed = false;
             const dropdown = document.getElementById('verseSelector');
             const selectedIndex = dropdown.value;
             currentVerse = versesList[selectedIndex];
@@ -294,20 +307,25 @@
         }
 
         function loadNewVerse() {
-            // Hide the answer div
-            document.getElementById('fullVerse').style.display = 'none';
-
-            // Reset the "Show Answer" button text
-            document.getElementById('showAnswerButton').innerText = 'Show Answer';
-
-            // Reset the full verse display state
-            isFullVerseDisplayed = false;
-
-            currentVerse = getRandomVerse(versesList); // Directly use the stored versesList, no need to fetch again
+            // Get a new random verse
+            currentVerse = getRandomVerse(versesList);
             setDropdownToCurrentVerse(); // Set dropdown to the new verse
-            displayVerse(currentVerse);
-        }
 
+            displayVerse(currentVerse);  // First, display the verse
+
+            // Then, check the display state and adjust accordingly
+            const fullVerseElement = document.getElementById('fullVerse');
+            const verseContentElement = document.getElementById('verseContent');
+
+            if (isFullVerseDisplayed) {
+                fullVerseElement.style.display = 'block';
+                verseContentElement.style.display = 'none';
+                fullVerseElement.innerText = currentVerse[currentLanguage].verse;
+            } else {
+                fullVerseElement.style.display = 'none';
+                verseContentElement.style.display = 'block';
+            }
+        }
 
 
 
@@ -320,8 +338,22 @@
                 changeDropdownOptions('english');
             }
             setDropdownToCurrentVerse();
-            displayVerse(currentVerse);
+            displayVerse(currentVerse);  // Update the displayed verse after changing the language
+
+            // Adjust the display based on the `isFullVerseDisplayed` state
+            const fullVerseElement = document.getElementById('fullVerse');
+            const verseContentElement = document.getElementById('verseContent');
+            if (isFullVerseDisplayed) {
+                fullVerseElement.style.display = 'block';
+                verseContentElement.style.display = 'none';
+                fullVerseElement.innerText = currentVerse[currentLanguage].verse;
+            } else {
+                fullVerseElement.style.display = 'none';
+                verseContentElement.style.display = 'block';
+            }
         }
+
+
 
         function changeDropdownOptions(language) {
             const dropdown = document.getElementById('verseSelector');
@@ -340,6 +372,38 @@
                 dropdown.appendChild(option);
             });
         }
+
+        function toggleFullVerse() {
+            const fullVerseElement = document.getElementById('fullVerse');
+            const verseContentElement = document.getElementById('verseContent');
+            const toggleFullVerseButton = document.getElementById('toggleFullVerseButton');
+            const showAnswerButton = document.getElementById('showAnswerButton');
+            const submitButton = document.querySelector('button[onclick="checkAnswers()"]');
+            const sameVerseButton = document.getElementById('sameVerse');
+            if (isFullVerseDisplayed) {
+                fullVerseElement.style.display = 'none';
+                verseContentElement.style.display = 'block';
+                toggleFullVerseButton.innerText = 'Practice full verse';
+
+                showAnswerButton.disabled = false;
+                submitButton.disabled = false;
+                sameVerseButton.disabled = false;
+            } else {
+                fullVerseElement.style.display = 'block';
+                verseContentElement.style.display = 'none';
+                fullVerseElement.innerText = currentVerse[currentLanguage].verse;
+                toggleFullVerseButton.innerText = 'Hide full verse';
+                showAnswerButton.disabled = true;
+                submitButton.disabled = true;
+                sameVerseButton.disabled = true;
+
+                removeHighlightedAnswers();
+            }
+
+            // Toggle the state
+            isFullVerseDisplayed = !isFullVerseDisplayed;
+        }
+
 
 
     </script>
