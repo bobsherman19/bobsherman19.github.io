@@ -75,7 +75,8 @@
             font-weight: bold;
         }
 
-        button:disabled, button:disabled:hover {
+        button:disabled,
+        button:disabled:hover {
             background-color: #cccccc;
             color: #888888;
             cursor: not-allowed;
@@ -86,6 +87,15 @@
 <body>
 
     <div>
+        <span>
+            Choose a set:
+            <select id="verseSetSelector" onchange="loadVersesFromSelectedSet()">
+                <option value="YA">YA</option>
+                <option value="YG">YG</option>
+            </select>
+        </span>
+        <br>
+        <br>
         <span>
             Pick a verse: <select id="verseSelector" onchange="selectVerse()"></select>
         </span>
@@ -99,7 +109,8 @@
         <button onclick="toggleShowAnswer()" id="showAnswerButton" style="background-color: orange;">Show
             Answer</button>
         <button onclick="regenerateBlanks()" style="background-color: red;" id="sameVerse">Try Same Verse Again</button>
-        <button onclick="toggleFullVerse()" id="toggleFullVerseButton" style="background-color: purple;">Practice full verse</button>
+        <button onclick="toggleFullVerse()" id="toggleFullVerseButton" style="background-color: purple;">Practice full
+            verse</button>
         <button onclick="loadNewVerse()">New Verse ></button>
         <button onclick="toggleLanguage()" style="background-color: pink;">Toggle Language (ENG/KOR)</button>
     </div>
@@ -109,13 +120,25 @@
         let currentVerse = null;
         let versesList = []; // Create a global variable to store all verses
 
-        fetch('verses.json').then(response => response.json()).then(data => {
-            versesList = data; // Store all the verses
-            populateVerseDropdown(data);
-            currentVerse = getRandomVerse(data);
-            setDropdownToCurrentVerse();
-            displayVerse(currentVerse);
-        });
+        function loadVersesFromSelectedSet() {
+            const verseSet = document.getElementById('verseSetSelector').value;
+            let filePath = 'verses.json'; // default to YA
+            if (verseSet === 'YG') {
+                filePath = 'verses2.json';
+            }
+
+            fetch(filePath).then(response => response.json()).then(data => {
+                versesList = data;
+                populateVerseDropdown(data);
+                currentVerse = getRandomVerse(data);
+                setDropdownToCurrentVerse();
+                displayVerse(currentVerse);
+            });
+        }
+
+        // Call the function initially to load the verses from the default set
+        loadVersesFromSelectedSet();
+
 
         function setDropdownToCurrentVerse() {
             const dropdown = document.getElementById('verseSelector');
@@ -144,7 +167,7 @@
             const selectedIndex = dropdown.value;
             currentVerse = versesList[selectedIndex];
             displayVerse(currentVerse);  // First, display the verse
-            
+
             // Then, check the display state and adjust accordingly
             const fullVerseElement = document.getElementById('fullVerse');
             const verseContentElement = document.getElementById('verseContent');
