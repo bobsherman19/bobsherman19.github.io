@@ -45,8 +45,58 @@
             "verse": "Search from the book of the LORD, and read: Not one of these shall fail; Not one shall lack her mate. For My mouth has commanded it, and His Spirit has gathered them."
         },
         "korean": {
-            "reference": "요한복음 3:3",
+            "reference": "이사야 34:16",
             "verse": "너희는 여호와의 책을 자세히 읽어 보라 이것들이 하나도 빠진 것이 없고 하나도 그 짝이 없는 것이 없으리니 이는 여호와의 입이 이를 명하셨고 그의 신이 이것들을 모으셨음이라"
+        }
+    },
+    {
+        "english": {
+            "reference": "2 Peter 1:21",
+            "verse": "for prophecy never came by the will of man, but holy men of God spoke as they were moved by the Holy Spirit."
+        },
+        "korean": {
+            "reference": "베드로후서 1:21",
+            "verse": "예언은 언제든지 사람의 뜻으로 낸 것이 아니요 오직 성령의 감동하심을 입은 사람들이 하나님께 받아 말한 것임이니라"
+        }
+    },
+    {
+        "english": {
+            "reference": "Romans 1:20",
+            "verse": "For since the creation of the world His invisible attributes are clearly seen, being understood by the things that are made, even His eternal power and Godhead, so that they are without excuse,"
+        },
+        "korean": {
+            "reference": "로마서 1:20",
+            "verse": "창세로부터 그의 보이지 아니하는 것들 곧 그의 영원하신 능력과 신성이 그 만드신 만물에 분명히 보여 알게 되나니 그러므로 저희가 핑계치 못할지니라"
+        }
+    },
+    {
+        "english": {
+            "reference": "Hebrews 3:4",
+            "verse": "For every house is built by someone, but He who built all things is God."
+        },
+        "korean": {
+            "reference": "히브리서 3:4",
+            "verse": "집마다 지은 이가 있으니 만물을 지으신 이는 하나님이시라"
+        }
+    },
+    {
+        "english": {
+            "reference": "Isaiah 45:18",
+            "verse": "For thus says the LORD, Who created the heavens, Who is God, Who formed the earth and made it, Who has established it, Who did not create it in vain, Who formed it to be inhabited: \"I am the LORD, and there is no other."
+        },
+        "korean": {
+            "reference": "이사야 45:18",
+            "verse": "여호와는 하늘을 창조하신 하나님이시며 땅도 조성하시고 견고케 하시되 헛되이 창조치 아니하시고 사람으로 거하게 지으신 자시니라 그 말씀에 나는 여호와라 나 외에 다른 이가 없느니라"
+        }
+    },
+    {
+        "english": {
+            "reference": "Job 12:7-9",
+            "verse": "\"But now ask the beasts, and they will teach you; And the birds of the air, and they will tell you; Or speak to the earth, and it will teach you; And the fish of the sea will explain to you. Who among all these does not know That the hand of the LORD has done this,"
+        },
+        "korean": {
+            "reference": "욥기 12:7-9",
+            "verse": "이제 모든 짐승에게 물어 보라 그것들이 네게 가르치리라 공중의 새에게 물어 보라 그것들이 또한 네게 고하리라 땅에게 말하라 네게 가르치리라 바다의 고기도 네게 설명하리라 이것들 중에 어느 것이 여호와의 손이 이를 행하신 줄을 알지 못하랴"
         }
     }
 ]
