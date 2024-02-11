@@ -457,6 +457,7 @@
             const showAnswerButton = document.getElementById('showAnswerButton');
             const submitButton = document.querySelector('button[onclick="checkAnswers()"]');
             const sameVerseButton = document.getElementById('sameVerse');
+            const practiceFullVerseButton = document.getElementById('practiceFullVerseButton');
             if (isFullVerseDisplayed) {
                 fullVerseElement.style.display = 'none';
                 verseContentElement.style.display = 'block';
@@ -465,6 +466,8 @@
                 showAnswerButton.disabled = false;
                 submitButton.disabled = false;
                 sameVerseButton.disabled = false;
+                practiceFullVerseButton.disabled = false;
+
             } else {
                 fullVerseElement.style.display = 'block';
                 verseContentElement.style.display = 'none';
@@ -473,7 +476,7 @@
                 showAnswerButton.disabled = true;
                 submitButton.disabled = true;
                 sameVerseButton.disabled = true;
-
+                practiceFullVerseButton.disabled = true;
                 removeHighlightedAnswers();
             }
 
