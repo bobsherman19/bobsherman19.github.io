@@ -123,7 +123,7 @@
         <button onclick="toggleFullVerse()" id="toggleFullVerseButton" style="background-color: purple;">Show full
             verse</button>
         <button onclick="loadNewVerse()">New Verse ></button>
-        <button onclick="toggleLanguage()" style="background-color: pink;">Toggle Language (ENG/KOR)</button>
+        <button onclick="toggleLanguage()" style="background-color: pink;" id="toggleLanguage">Toggle Language (ENG/KOR)</button>
         <button onclick="enableFullVersePractice()" id="practiceFullVerseButton" style="background-color: #4CAF50;">Practice Full Verse</button>
     </div>
 
@@ -216,19 +216,20 @@
         }
 
         function regenerateBlanks() {
-            // Hide the answer div
-            document.getElementById('fullVerse').style.display = 'none';
-
-            // Reset the "Show Answer" button text
-            document.getElementById('showAnswerButton').innerText = 'Show Answer';
-
-            // Reset the full verse display state
-            isFullVerseDisplayed = false;
-
-            // Display the current verse with new blanks
-            displayVerse(currentVerse);
+            const practiceFullVerseButton = document.getElementById('practiceFullVerseButton');
+            if (practiceFullVerseButton.innerText === "Stop Practicing Full Verse") {
+                // Clear the textarea, feedback, and reset text color for full verse practice mode
+                const userVerseInput = document.getElementById('userVerseInput');
+                userVerseInput.value = ''; // Clear textarea content
+                userVerseInput.classList.remove('correct', 'incorrect'); // Remove correctness indication classes
+                document.getElementById('feedback').innerText = ''; // Clear any feedback text
+                document.getElementById('fullVerse').style.display = 'none'; // Ensure full verse is hidden
+            } else {
+                // Existing functionality for fill-in-the-blanks mode
+                document.getElementById('fullVerse').style.display = 'none';
+                displayVerse(currentVerse);
+            }
         }
-
 
         function displayVerse(verse) {
             document.getElementById('verseReference').innerText = verse[currentLanguage].reference;
@@ -515,7 +516,7 @@
             const userVerseInput = document.getElementById('userVerseInput');
             const fullVerse = currentVerse[currentLanguage].verse.trim();
             const userInput = userVerseInput.value.trim();
-        
+            
             // Check if the user's input matches the full verse exactly
             if (userInput.toLowerCase() === fullVerse.toLowerCase()) {
                 userVerseInput.classList.add('correct');
@@ -543,9 +544,14 @@
         function disableOtherButtons(disable) {
             document.getElementById('toggleFullVerseButton').disabled = disable;
             document.getElementById('showAnswerButton').disabled = disable;
-            document.getElementById('sameVerse').disabled = disable;
-            document.getElementById('loadNewVerse').disabled = disable; // Assuming there is a button to load a new verse
+            document.getElementById('toggleLanguage').disabled = disable;
+            // Do not disable the 'Try Same Verse Again' button in practice mode
+            if (document.getElementById('practiceFullVerseButton').innerText !== "Stop Practicing Full Verse") {
+                document.getElementById('sameVerse').disabled = disable;
+            }
+            document.getElementById('loadNewVerse').disabled = disable;
         }
+
     </script>
 
 </body>
