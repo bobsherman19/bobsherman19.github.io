@@ -178,21 +178,38 @@
             const dropdown = document.getElementById('verseSelector');
             const selectedIndex = dropdown.value;
             currentVerse = versesList[selectedIndex];
-            displayVerse(currentVerse);  // First, display the verse
-
-            // Then, check the display state and adjust accordingly
+            const practiceFullVerseButton = document.getElementById('practiceFullVerseButton');
+            const userVerseInput = document.getElementById('userVerseInput');
             const fullVerseElement = document.getElementById('fullVerse');
             const verseContentElement = document.getElementById('verseContent');
-            if (isFullVerseDisplayed) {
-                fullVerseElement.style.display = 'block';
-                verseContentElement.style.display = 'none';
-                fullVerseElement.innerText = currentVerse[currentLanguage].verse;
-            } else {
+        
+            // Clear previous state
+            document.getElementById('feedback').innerText = '';
+            const inputs = document.querySelectorAll('input[type="text"], textarea');
+            inputs.forEach(input => {
+                input.classList.remove('correct', 'incorrect'); // Remove color classes
+                input.value = ''; // Clear input values
+            });
+        
+            // Check if Practice Full Verse mode is active
+            if (practiceFullVerseButton.innerText === "Stop Practicing Full Verse") {
+                // Practice Full Verse mode is active
                 fullVerseElement.style.display = 'none';
+                verseContentElement.style.display = 'none';
+                userVerseInput.style.display = 'block';
+                userVerseInput.value = ''; // Ensure textarea is empty for new input
+            } else {
+                // Regular mode, display verse with blanks
+                fullVerseElement.style.display = 'none';
+                userVerseInput.style.display = 'none'; // Ensure textarea is hidden
                 verseContentElement.style.display = 'block';
+                displayVerse(currentVerse); // Display the selected verse with blanks
             }
+        
+            // Update the verse reference display
+            document.getElementById('verseReference').innerText = currentVerse[currentLanguage].reference;
         }
-
+        
 
         function getRandomVerse(verses) {
             return verses[Math.floor(Math.random() * verses.length)];
