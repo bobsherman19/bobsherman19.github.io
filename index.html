@@ -503,6 +503,7 @@
                 disableOtherButtons(true);
             } else {
                 // Reset to original state
+                selectVerseFromDropdown(); // Update currentVerse based on dropdown selection
                 document.getElementById('verseContent').style.display = 'block';
                 userVerseInput.style.display = 'none';
                 userVerseInput.classList.remove('correct', 'incorrect'); // Ensure textarea color is reset
@@ -515,6 +516,13 @@
                 disableOtherButtons(false);
             }
         }
+        
+        function selectVerseFromDropdown() {
+            const dropdown = document.getElementById('verseSelector');
+            currentVerse = versesList[dropdown.value];
+            displayVerse(currentVerse); // Refresh the display to show the selected verse
+        }
+        
         function checkFullVerseInput() {
             const userVerseInput = document.getElementById('userVerseInput');
             const fullVerse = currentVerse[currentLanguage].verse.trim();
