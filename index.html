@@ -81,6 +81,17 @@
             color: #888888;
             cursor: not-allowed;
         }
+
+        textarea.correct {
+            border-color: green;
+            background-color: lightgreen;
+        }
+        
+        textarea.incorrect {
+            border-color: red;
+            background-color: lightcoral;
+        }
+        
     </style>
 </head>
 
@@ -103,6 +114,7 @@
         <div id="verseContent"></div>
         <div id="fullVerse" style="display: none;"></div>
         <p id="feedback"></p>
+        <textarea id="userVerseInput" style="display: none; width: 100%; height: 100px; margin-top: 10px;"></textarea>
         <br><br>
         <button onclick="checkAnswers()" style="background-color: green;">Submit</button>
         <button onclick="toggleShowAnswer()" id="showAnswerButton" style="background-color: orange;">Show
@@ -112,6 +124,7 @@
             verse</button>
         <button onclick="loadNewVerse()">New Verse ></button>
         <button onclick="toggleLanguage()" style="background-color: pink;">Toggle Language (ENG/KOR)</button>
+        <button onclick="enableFullVersePractice()" id="practiceFullVerseButton" style="background-color: #4CAF50;">Practice Full Verse</button>
     </div>
 
     <script>
@@ -339,24 +352,41 @@
             // Get a new random verse
             currentVerse = getRandomVerse(versesList);
             setDropdownToCurrentVerse(); // Set dropdown to the new verse
-
-            displayVerse(currentVerse);  // First, display the verse
-
-            // Then, check the display state and adjust accordingly
+            document.getElementById('verseReference').innerText = currentVerse[currentLanguage].reference;
+        
+            const practiceFullVerseButton = document.getElementById('practiceFullVerseButton');
             const fullVerseElement = document.getElementById('fullVerse');
             const verseContentElement = document.getElementById('verseContent');
-
-            if (isFullVerseDisplayed) {
-                fullVerseElement.style.display = 'block';
+            const userVerseInput = document.getElementById('userVerseInput');
+        
+            // Reset feedback and clear styles from all textboxes and textarea
+            document.getElementById('feedback').innerText = '';
+            const inputs = document.querySelectorAll('input[type="text"], textarea');
+            inputs.forEach(input => {
+                input.classList.remove('correct', 'incorrect'); // Remove color classes
+                input.value = ''; // Clear input values
+            });
+        
+            if (practiceFullVerseButton.innerText === "Stop Practicing Full Verse") {
+                // If in Practice Full Verse mode, prepare for practicing
+                fullVerseElement.style.display = 'none';
                 verseContentElement.style.display = 'none';
-                fullVerseElement.innerText = currentVerse[currentLanguage].verse;
+                userVerseInput.style.display = 'block';
+                userVerseInput.value = ''; // Clear any existing input
+                document.querySelector('button[onclick="checkAnswers()"]').setAttribute('onclick', 'checkFullVerseInput()');
             } else {
+                // If not in Practice Full Verse mode, display the verse normally
                 fullVerseElement.style.display = 'none';
                 verseContentElement.style.display = 'block';
+                userVerseInput.style.display = 'none'; // Hide the textarea
+                displayVerse(currentVerse); // Display the new verse with blanks
+                document.querySelector('button[onclick="checkFullVerseInput()"]').setAttribute('onclick', 'checkAnswers()'); // Ensure correct function is called on submit
             }
+        
+            disableOtherButtons(false); // Re-enable any buttons that were previously disabled
         }
-
-
+        
+        
 
         function toggleLanguage() {
             if (currentLanguage === 'english') {
@@ -433,8 +463,72 @@
             isFullVerseDisplayed = !isFullVerseDisplayed;
         }
 
+        function enableFullVersePractice() {
+            const practiceFullVerseButton = document.getElementById('practiceFullVerseButton');
+            const userVerseInput = document.getElementById('userVerseInput');
+            const submitButton = document.querySelector('button[onclick="checkFullVerseInput()"], button[onclick="checkAnswers()"]');
+        
+            // Toggle the practice mode based on the button text
+            if (practiceFullVerseButton.innerText === "Practice Full Verse") {
+                // Switch to practicing mode
+                document.getElementById('verseContent').style.display = 'none';
+                document.getElementById('fullVerse').style.display = 'none';
+                userVerseInput.style.display = 'block';
+                userVerseInput.classList.remove('correct', 'incorrect'); // Reset color classes
+                userVerseInput.value = ''; // Clear previous input
+        
+                submitButton.setAttribute('onclick', 'checkFullVerseInput()'); // Change function called on submit
+                practiceFullVerseButton.innerText = "Stop Practicing Full Verse";
+                disableOtherButtons(true);
+            } else {
+                // Reset to original state
+                document.getElementById('verseContent').style.display = 'block';
+                userVerseInput.style.display = 'none';
+                userVerseInput.classList.remove('correct', 'incorrect'); // Ensure textarea color is reset
+                userVerseInput.value = ''; // Clear textarea
+                document.getElementById('feedback').innerText = ''; // Clear feedback text
+                document.getElementById('fullVerse').style.display = 'none';
+        
+                submitButton.setAttribute('onclick', 'checkAnswers()'); // Reset submit button action
+                practiceFullVerseButton.innerText = "Practice Full Verse";
+                disableOtherButtons(false);
+            }
+        }
+        function checkFullVerseInput() {
+            const userVerseInput = document.getElementById('userVerseInput');
+            const fullVerse = currentVerse[currentLanguage].verse.trim();
+            const userInput = userVerseInput.value.trim();
+        
+            // Check if the user's input matches the full verse exactly
+            if (userInput.toLowerCase() === fullVerse.toLowerCase()) {
+                userVerseInput.classList.add('correct');
+                userVerseInput.classList.remove('incorrect');
+                document.getElementById('feedback').innerText = 'Correct! Well done.';
+                document.getElementById('fullVerse').style.display = 'none'; // Hide the full verse if it was shown
+            } else {
+                userVerseInput.classList.add('incorrect');
+                userVerseInput.classList.remove('correct');
+                document.getElementById('feedback').innerText = 'Try again!';
+                // Show the correct full verse at the bottom
+                document.getElementById('fullVerse').innerText = fullVerse;
+                document.getElementById('fullVerse').style.display = 'block';
+            }
+        }
 
-
+        function resetPracticeMode() {
+            document.getElementById('verseContent').style.display = 'block'; // Show verse content
+            document.getElementById('userVerseInput').style.display = 'none'; // Hide the textarea
+            document.getElementById('feedback').innerText = ''; // Clear feedback text
+            document.getElementById('fullVerse').style.display = 'none'; // Hide full verse if shown
+            document.querySelector('button[onclick="checkFullVerseInput()"]').setAttribute('onclick', 'checkAnswers()'); // Reset submit button action
+        }
+        
+        function disableOtherButtons(disable) {
+            document.getElementById('toggleFullVerseButton').disabled = disable;
+            document.getElementById('showAnswerButton').disabled = disable;
+            document.getElementById('sameVerse').disabled = disable;
+            document.getElementById('loadNewVerse').disabled = disable; // Assuming there is a button to load a new verse
+        }
     </script>
 
 </body>
