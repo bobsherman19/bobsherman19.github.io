@@ -116,13 +116,13 @@
         <p id="feedback"></p>
         <textarea id="userVerseInput" style="display: none; width: 100%; height: 100px; margin-top: 10px;"></textarea>
         <br><br>
-        <button onclick="checkAnswers()" style="background-color: green;">Submit</button>
+        <button id="submitButton" onclick="checkAnswers()" style="background-color: green;">Submit</button>
         <button onclick="toggleShowAnswer()" id="showAnswerButton" style="background-color: orange;">Show
             Answer</button>
         <button onclick="regenerateBlanks()" style="background-color: red;" id="sameVerse">Try Same Verse Again</button>
         <button onclick="toggleFullVerse()" id="toggleFullVerseButton" style="background-color: purple;">Show full
             verse</button>
-        <button onclick="loadNewVerse()">New Verse ></button>
+        <button onclick="loadNewVerse()" id="loadNewVerseButton">New Verse ></button>
         <button onclick="toggleLanguage()" style="background-color: pink;" id="toggleLanguage">Toggle Language (ENG/KOR)</button>
         <button onclick="enableFullVersePractice()" id="practiceFullVerseButton" style="background-color: #4CAF50;">Practice Full Verse</button>
     </div>
@@ -182,7 +182,7 @@
             const userVerseInput = document.getElementById('userVerseInput');
             const fullVerseElement = document.getElementById('fullVerse');
             const verseContentElement = document.getElementById('verseContent');
-        
+            resetShowAnswerState();
             // Clear previous state
             document.getElementById('feedback').innerText = '';
             const inputs = document.querySelectorAll('input[type="text"], textarea');
@@ -228,6 +228,7 @@
                 // Existing functionality for fill-in-the-blanks mode
                 document.getElementById('fullVerse').style.display = 'none';
                 displayVerse(currentVerse);
+                resetShowAnswerState();
             }
         }
 
@@ -266,56 +267,53 @@
         }
 
         function blankOutWordsRandomlyENG(verse) {
-            // Split the verse into words and punctuation
-            let wordsAndPunctuation = verse.match(/(\w+|\W+)/g);
-
-            // Extract words and punctuation into separate arrays
-            let words = wordsAndPunctuation.filter(item => /[a-zA-Z]/.test(item));
-            let punctuation = wordsAndPunctuation.filter(item => !/[a-zA-Z]/.test(item));
-
-            let numToBlank = Math.floor(words.length * 0.2); // blank out roughly 20% of words
-
+            // Preprocess the verse to handle escaped quotation marks
+            // This removes the backslash preceding quotation marks
+            let processedVerse = verse.replace(/\\"/g, '"');
+            // Continue with processing as before, now that escaped quotes are handled
+            let wordsAndPunctuation = processedVerse.match(/(\w+|\W+)/g);
+        
+            // Your existing logic to blank out words...
+            let words = wordsAndPunctuation.filter(item => /[a-zA-Z]/.test(item) && item !== '"');
+            let numToBlank = Math.floor(words.length * 0.2);
+        
             let indicesBlanked = [];
             while (indicesBlanked.length < numToBlank) {
                 let randomIndex = Math.floor(Math.random() * words.length);
-
-                if (!indicesBlanked.includes(randomIndex) && words[randomIndex] !== '--') {
+                if (!indicesBlanked.includes(randomIndex)) {
                     indicesBlanked.push(randomIndex);
-
-                    // Check if the word contains punctuation and add it accordingly
-                    const word = words[randomIndex];
-                    const wordWithoutPunctuation = word.replace(/[^a-zA-Z]+/g, '');
-
+                    let wordWithoutPunctuation = words[randomIndex].replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"");
                     words[randomIndex] = `<input type="text" data-answer="${wordWithoutPunctuation}" style="width:100px;">`;
                 }
             }
-
-            // Combine words and punctuation back together
+        
+            // Reassemble the verse
             let result = '';
-            for (let i = 0; i < wordsAndPunctuation.length; i++) {
-                if (/[a-zA-Z]/.test(wordsAndPunctuation[i])) {
-                    result += words.shift();
+            wordsAndPunctuation.forEach(part => {
+                let wordIndex = words.indexOf(part);
+                if (wordIndex !== -1) {
+                    result += words[wordIndex];
+                    words.splice(wordIndex, 1); // Remove the word from the array to avoid duplication
                 } else {
-                    result += wordsAndPunctuation[i];
+                    result += part;
                 }
-            }
-
+            });
             return result;
         }
-
-
-
+        
         // Add a variable to keep track of whether the full verse is displayed
         let isFullVerseDisplayed = false;
+        let isAnswerDisplayed = false; // Add this near your global variables
 
         function toggleShowAnswer() {
             const inputs = document.querySelectorAll('input[data-answer]');
             const showAnswerButton = document.getElementById('showAnswerButton');
-
-            if (isFullVerseDisplayed) {
+        
+            if (isAnswerDisplayed) {
                 // If the answers are currently displayed, hide them
                 removeHighlightedAnswers();
                 showAnswerButton.innerText = 'Show Answer';
+                isAnswerDisplayed = false; // Update to reflect answers are now hidden
             } else {
                 // If the answers are not displayed, show them
                 inputs.forEach(input => {
@@ -326,11 +324,10 @@
                     input.parentNode.insertBefore(answerSpan, input.nextSibling);
                 });
                 showAnswerButton.innerText = 'Hide Answer';
+                isAnswerDisplayed = true; // Update to reflect answers are now shown
             }
-
-            // Toggle the state of the answer display
-            isFullVerseDisplayed = !isFullVerseDisplayed;
         }
+        
 
         function removeHighlightedAnswers() {
             const inputs = document.querySelectorAll('input[data-answer]');
@@ -376,7 +373,7 @@
             const fullVerseElement = document.getElementById('fullVerse');
             const verseContentElement = document.getElementById('verseContent');
             const userVerseInput = document.getElementById('userVerseInput');
-        
+            
             // Reset feedback and clear styles from all textboxes and textarea
             document.getElementById('feedback').innerText = '';
             const inputs = document.querySelectorAll('input[type="text"], textarea');
@@ -385,22 +382,23 @@
                 input.value = ''; // Clear input values
             });
         
+            // Hide or show elements based on the current state
+            fullVerseElement.style.display = 'none';
+            verseContentElement.style.display = 'block';
+            userVerseInput.style.display = 'none'; // Hide the textarea
+        
+            // Ensure the correct function is called on submit
+            const submitButton = document.getElementById('submitButton'); // Assuming you have given your submit button an ID
             if (practiceFullVerseButton.innerText === "Stop Practicing Full Verse") {
-                // If in Practice Full Verse mode, prepare for practicing
-                fullVerseElement.style.display = 'none';
-                verseContentElement.style.display = 'none';
                 userVerseInput.style.display = 'block';
                 userVerseInput.value = ''; // Clear any existing input
-                document.querySelector('button[onclick="checkAnswers()"]').setAttribute('onclick', 'checkFullVerseInput()');
+                submitButton.onclick = checkFullVerseInput; // Directly assign the function without quotes
             } else {
-                // If not in Practice Full Verse mode, display the verse normally
-                fullVerseElement.style.display = 'none';
-                verseContentElement.style.display = 'block';
-                userVerseInput.style.display = 'none'; // Hide the textarea
                 displayVerse(currentVerse); // Display the new verse with blanks
-                document.querySelector('button[onclick="checkFullVerseInput()"]').setAttribute('onclick', 'checkAnswers()'); // Ensure correct function is called on submit
+                submitButton.onclick = checkAnswers; // Directly assign the function without quotes
             }
         
+            resetShowAnswerState(); // Reset the state of the Show Answer button
             disableOtherButtons(false); // Re-enable any buttons that were previously disabled
         }
         
@@ -462,7 +460,7 @@
                 fullVerseElement.style.display = 'none';
                 verseContentElement.style.display = 'block';
                 toggleFullVerseButton.innerText = 'Show full verse';
-
+                isAnswerDisplayed = false;
                 showAnswerButton.disabled = false;
                 submitButton.disabled = false;
                 sameVerseButton.disabled = false;
@@ -478,6 +476,7 @@
                 sameVerseButton.disabled = true;
                 practiceFullVerseButton.disabled = true;
                 removeHighlightedAnswers();
+                resetShowAnswerState();
             }
 
             // Toggle the state
@@ -497,7 +496,7 @@
                 userVerseInput.style.display = 'block';
                 userVerseInput.classList.remove('correct', 'incorrect'); // Reset color classes
                 userVerseInput.value = ''; // Clear previous input
-        
+                document.getElementById('feedback').innerText = ''; // Clear feedback text
                 submitButton.setAttribute('onclick', 'checkFullVerseInput()'); // Change function called on submit
                 practiceFullVerseButton.innerText = "Stop Practicing Full Verse";
                 disableOtherButtons(true);
@@ -576,14 +575,29 @@
         }
         
         function disableOtherButtons(disable) {
-            document.getElementById('toggleFullVerseButton').disabled = disable;
-            document.getElementById('showAnswerButton').disabled = disable;
-            document.getElementById('toggleLanguage').disabled = disable;
-            // Do not disable the 'Try Same Verse Again' button in practice mode
+            const toggleFullVerseButton = document.getElementById('toggleFullVerseButton');
+            const showAnswerButton = document.getElementById('showAnswerButton');
+            const toggleLanguageButton = document.getElementById('toggleLanguage');
+            const sameVerseButton = document.getElementById('sameVerse');
+            const loadNewVerseButton = document.getElementById('loadNewVerse'); // Ensure this ID exists or adjust as needed
+        
+            if (toggleFullVerseButton) toggleFullVerseButton.disabled = disable;
+            if (showAnswerButton) showAnswerButton.disabled = disable;
+            if (toggleLanguageButton) toggleLanguageButton.disabled = disable;
+        
+            // The 'Try Same Verse Again' button should not be disabled in practice mode
             if (document.getElementById('practiceFullVerseButton').innerText !== "Stop Practicing Full Verse") {
-                document.getElementById('sameVerse').disabled = disable;
+                if (sameVerseButton) sameVerseButton.disabled = disable;
             }
-            document.getElementById('loadNewVerse').disabled = disable;
+            
+            if (loadNewVerseButton) loadNewVerseButton.disabled = disable;
+        }
+        
+        function resetShowAnswerState() {
+            const showAnswerButton = document.getElementById('showAnswerButton');
+            showAnswerButton.innerText = 'Show Answer'; // Reset button text to default
+            isFullVerseDisplayed = false; // Reset the internal state to default
+            isAnswerDisplayed = false;
         }
 
     </script>
