@@ -234,7 +234,7 @@
 
         function displayVerse(verse) {
             document.getElementById('verseReference').innerText = verse[currentLanguage].reference;
-            if (verse[currentLanguage] === 'english') {
+            if (currentLanguage === 'english') {
                 document.getElementById('verseContent').innerHTML = blankOutWordsRandomlyENG(verse[currentLanguage].verse);
             }
             else {
@@ -267,39 +267,34 @@
         }
 
         function blankOutWordsRandomlyENG(verse) {
-            // Preprocess the verse to handle escaped quotation marks
-            // This removes the backslash preceding quotation marks
-            let processedVerse = verse.replace(/\\"/g, '"');
-            // Continue with processing as before, now that escaped quotes are handled
-            let wordsAndPunctuation = processedVerse.match(/(\w+|\W+)/g);
+            // Split the verse into tokens with a regex that captures:
+            // - Words possibly with leading or trailing apostrophes/quotation marks and punctuation
+            // - Spaces as separate tokens to preserve original spacing
+            let tokens = verse.match(/['‘"]?[\w'’]+[.,;!?()]*['’"]?|\s+/g);
+            let wordIndices = tokens
+                .map((token, index) => (/[\w'’]/.test(token) && !/^['‘"]$/.test(token) ? index : null))
+                .filter(index => index !== null);
+            let blankCount = Math.floor(wordIndices.length * 0.2);
         
-            // Your existing logic to blank out words...
-            let words = wordsAndPunctuation.filter(item => /[a-zA-Z]/.test(item) && item !== '"');
-            let numToBlank = Math.floor(words.length * 0.2);
-        
-            let indicesBlanked = [];
-            while (indicesBlanked.length < numToBlank) {
-                let randomIndex = Math.floor(Math.random() * words.length);
-                if (!indicesBlanked.includes(randomIndex)) {
-                    indicesBlanked.push(randomIndex);
-                    let wordWithoutPunctuation = words[randomIndex].replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"");
-                    words[randomIndex] = `<input type="text" data-answer="${wordWithoutPunctuation}" style="width:100px;">`;
+            let selectedIndices = [];
+            while (selectedIndices.length < blankCount) {
+                let randomIndex = wordIndices[Math.floor(Math.random() * wordIndices.length)];
+                if (!selectedIndices.includes(randomIndex)) {
+                    selectedIndices.push(randomIndex);
                 }
             }
         
-            // Reassemble the verse
-            let result = '';
-            wordsAndPunctuation.forEach(part => {
-                let wordIndex = words.indexOf(part);
-                if (wordIndex !== -1) {
-                    result += words[wordIndex];
-                    words.splice(wordIndex, 1); // Remove the word from the array to avoid duplication
-                } else {
-                    result += part;
-                }
+            selectedIndices.forEach(index => {
+                let token = tokens[index];
+                // Extract leading and trailing punctuation or quotation marks, if any
+                let [leadingChars, coreWord, trailingChars] = token.match(/^(['‘"]?)([\w'’]+)([.,;!?()]*['’"]?)$/).slice(1);
+        
+                tokens[index] = `${leadingChars}<input type="text" data-answer="${coreWord}" style="width:100px;">${trailingChars}`;
             });
-            return result;
+        
+            return tokens.join('');
         }
+        
         
         // Add a variable to keep track of whether the full verse is displayed
         let isFullVerseDisplayed = false;
