@@ -182,32 +182,75 @@
             const userVerseInput = document.getElementById('userVerseInput');
             const fullVerseElement = document.getElementById('fullVerse');
             const verseContentElement = document.getElementById('verseContent');
-            resetShowAnswerState();
-            // Clear previous state
-            document.getElementById('feedback').innerText = '';
-            const inputs = document.querySelectorAll('input[type="text"], textarea');
-            inputs.forEach(input => {
-                input.classList.remove('correct', 'incorrect'); // Remove color classes
-                input.value = ''; // Clear input values
-            });
-        
-            // Check if Practice Full Verse mode is active
-            if (practiceFullVerseButton.innerText === "Stop Practicing Full Verse") {
-                // Practice Full Verse mode is active
-                fullVerseElement.style.display = 'none';
-                verseContentElement.style.display = 'none';
-                userVerseInput.style.display = 'block';
-                userVerseInput.value = ''; // Ensure textarea is empty for new input
-            } else {
-                // Regular mode, display verse with blanks
-                fullVerseElement.style.display = 'none';
-                userVerseInput.style.display = 'none'; // Ensure textarea is hidden
-                verseContentElement.style.display = 'block';
-                displayVerse(currentVerse); // Display the selected verse with blanks
-            }
-        
             // Update the verse reference display
             document.getElementById('verseReference').innerText = currentVerse[currentLanguage].reference;
+            if(!isFullVerseDisplayed){
+                resetShowAnswerState();
+                // Clear previous state
+                document.getElementById('feedback').innerText = '';
+                const inputs = document.querySelectorAll('input[type="text"], textarea');
+                inputs.forEach(input => {
+                    input.classList.remove('correct', 'incorrect'); // Remove color classes
+                    input.value = ''; // Clear input values
+                });
+                // Check if Practice Full Verse mode is active
+                if (practiceFullVerseButton.innerText === "Stop Practicing Full Verse") {
+                    // Practice Full Verse mode is active
+                    fullVerseElement.style.display = 'none';
+                    verseContentElement.style.display = 'none';
+                    userVerseInput.style.display = 'block';
+                    userVerseInput.value = ''; // Ensure textarea is empty for new input
+                } else {
+                    // Regular mode, display verse with blanks
+                    fullVerseElement.style.display = 'none';
+                    userVerseInput.style.display = 'none'; // Ensure textarea is hidden
+                    verseContentElement.style.display = 'block';
+                    displayVerse(currentVerse); // Display the selected verse with blanks
+                }
+            }
+            else{
+                document.getElementById('fullVerse').innerText = currentVerse[currentLanguage].verse;
+            }
+            /**
+            if(!isFullVerseDisplayed){
+                const dropdown = document.getElementById('verseSelector');
+                const selectedIndex = dropdown.value;
+                currentVerse = versesList[selectedIndex];
+                const practiceFullVerseButton = document.getElementById('practiceFullVerseButton');
+                const userVerseInput = document.getElementById('userVerseInput');
+                const fullVerseElement = document.getElementById('fullVerse');
+                const verseContentElement = document.getElementById('verseContent');
+                resetShowAnswerState();
+                // Clear previous state
+                document.getElementById('feedback').innerText = '';
+                const inputs = document.querySelectorAll('input[type="text"], textarea');
+                inputs.forEach(input => {
+                    input.classList.remove('correct', 'incorrect'); // Remove color classes
+                    input.value = ''; // Clear input values
+                });
+            
+                // Check if Practice Full Verse mode is active
+                if (practiceFullVerseButton.innerText === "Stop Practicing Full Verse") {
+                    // Practice Full Verse mode is active
+                    fullVerseElement.style.display = 'none';
+                    verseContentElement.style.display = 'none';
+                    userVerseInput.style.display = 'block';
+                    userVerseInput.value = ''; // Ensure textarea is empty for new input
+                } else {
+                    // Regular mode, display verse with blanks
+                    fullVerseElement.style.display = 'none';
+                    userVerseInput.style.display = 'none'; // Ensure textarea is hidden
+                    verseContentElement.style.display = 'block';
+                    displayVerse(currentVerse); // Display the selected verse with blanks
+                }
+            
+                // Update the verse reference display
+                document.getElementById('verseReference').innerText = currentVerse[currentLanguage].reference;
+            }
+            else{
+                document.getElementById('fullVerse').innerText = currentVerse[currentLanguage].verse;
+            }
+            **/
         }
         
 
@@ -363,38 +406,43 @@
             currentVerse = getRandomVerse(versesList);
             setDropdownToCurrentVerse(); // Set dropdown to the new verse
             document.getElementById('verseReference').innerText = currentVerse[currentLanguage].reference;
-        
-            const practiceFullVerseButton = document.getElementById('practiceFullVerseButton');
-            const fullVerseElement = document.getElementById('fullVerse');
-            const verseContentElement = document.getElementById('verseContent');
-            const userVerseInput = document.getElementById('userVerseInput');
             
-            // Reset feedback and clear styles from all textboxes and textarea
-            document.getElementById('feedback').innerText = '';
-            const inputs = document.querySelectorAll('input[type="text"], textarea');
-            inputs.forEach(input => {
-                input.classList.remove('correct', 'incorrect'); // Remove color classes
-                input.value = ''; // Clear input values
-            });
-        
-            // Hide or show elements based on the current state
-            fullVerseElement.style.display = 'none';
-            verseContentElement.style.display = 'block';
-            userVerseInput.style.display = 'none'; // Hide the textarea
-        
-            // Ensure the correct function is called on submit
-            const submitButton = document.getElementById('submitButton'); // Assuming you have given your submit button an ID
-            if (practiceFullVerseButton.innerText === "Stop Practicing Full Verse") {
-                userVerseInput.style.display = 'block';
-                userVerseInput.value = ''; // Clear any existing input
-                submitButton.onclick = checkFullVerseInput; // Directly assign the function without quotes
-            } else {
-                displayVerse(currentVerse); // Display the new verse with blanks
-                submitButton.onclick = checkAnswers; // Directly assign the function without quotes
+            if (!isFullVerseDisplayed){
+                const practiceFullVerseButton = document.getElementById('practiceFullVerseButton');
+                const fullVerseElement = document.getElementById('fullVerse');
+                const verseContentElement = document.getElementById('verseContent');
+                const userVerseInput = document.getElementById('userVerseInput');
+                
+                // Reset feedback and clear styles from all textboxes and textarea
+                document.getElementById('feedback').innerText = '';
+                const inputs = document.querySelectorAll('input[type="text"], textarea');
+                inputs.forEach(input => {
+                    input.classList.remove('correct', 'incorrect'); // Remove color classes
+                    input.value = ''; // Clear input values
+                });
+            
+                // Hide or show elements based on the current state
+                fullVerseElement.style.display = 'none';
+                verseContentElement.style.display = 'block';
+                userVerseInput.style.display = 'none'; // Hide the textarea
+            
+                // Ensure the correct function is called on submit
+                const submitButton = document.getElementById('submitButton'); // Assuming you have given your submit button an ID
+                if (practiceFullVerseButton.innerText === "Stop Practicing Full Verse") {
+                    userVerseInput.style.display = 'block';
+                    userVerseInput.value = ''; // Clear any existing input
+                    submitButton.onclick = checkFullVerseInput; // Directly assign the function without quotes
+                } else {
+                    displayVerse(currentVerse); // Display the new verse with blanks
+                    submitButton.onclick = checkAnswers; // Directly assign the function without quotes
+                }
+            
+                resetShowAnswerState(); // Reset the state of the Show Answer button
+                disableOtherButtons(false); // Re-enable any buttons that were previously disabled
             }
-        
-            resetShowAnswerState(); // Reset the state of the Show Answer button
-            disableOtherButtons(false); // Re-enable any buttons that were previously disabled
+            else{
+                document.getElementById('fullVerse').innerText = currentVerse[currentLanguage].verse;
+            }
         }
         
         
