@@ -1,16 +1,6 @@
 [
     {
         "english": {
-            "reference": "Colossians 1:16",
-            "verse": "For by Him all things were created that are in heaven and that are on earth, visible and invisible, whether thrones or dominions or principalities or powers. All things were created through Him and for Him."
-        },
-        "korean": {
-            "reference": "골로새서 1:16",
-            "verse": "만물이 그에게 창조되되 하늘과 땅에서 보이는 것들과 보이지 않는 것들과 혹은 보좌들이나 주관들이나 정사들이나 권세들이나 만물이 다 그로 말미암고 그를 위하여 창조되었고"
-        }
-    },
-    {
-        "english": {
             "reference": "Luke 12:20-21",
             "verse": "But God said to him, 'Fool! This night your soul will be required of you; then whose will those things be which you have provided?' So is he who lays up treasure for himself, and is not rich toward God."
         },
@@ -21,12 +11,42 @@
     },
     {
         "english": {
+            "reference": "Colossians 1:16",
+            "verse": "For by Him all things were created that are in heaven and that are on earth, visible and invisible, whether thrones or dominions or principalities or powers. All things were created through Him and for Him."
+        },
+        "korean": {
+            "reference": "골로새서 1:16",
+            "verse": "만물이 그에게 창조되되 하늘과 땅에서 보이는 것들과 보이지 않는 것들과 혹은 보좌들이나 주관들이나 정사들이나 권세들이나 만물이 다 그로 말미암고 그를 위하여 창조되었고"
+        }
+    },
+    {
+        "english": {
+            "reference": "Psalms 119:89-91",
+            "verse": "Forever, O LORD, Your word is settled in heaven. Your faithfulness endures to all generations; You established the earth, and it abides. They continue this day according to Your ordinances, For all are Your servants."
+        },
+        "korean": {
+            "reference": "시편 119:89-91",
+            "verse": "여호와여 주의 말씀이 영원히 하늘에 굳게 섰사오며 주의 성실하심은 대대에 이르나이다 주께서 땅을 세우셨으므로 땅이 항상 있사오니 천지가 주의 규례대로 오늘까지 있음은 만물이 주의 종이 된 연고니이다"
+        }
+    },
+    {
+        "english": {
             "reference": "John 3:16",
             "verse": "For God so loved the world that He gave His only begotten Son, that whoever believes in Him should not perish but have everlasting life."
         },
         "korean": {
             "reference": "요한복음 3:16",
             "verse": "하나님이 세상을 이처럼 사랑하사 독생자를 주셨으니 이는 저를 믿는 자마다 멸망치 않고 영생을 얻게 하려 하심이니라"
+        }
+    },
+    {
+        "english": {
+            "reference": "Romans 2:4",
+            "verse": "Or do you despise the riches of His goodness, forbearance, and longsuffering, not knowing that the goodness of God leads you to repentance?"
+        },
+        "korean": {
+            "reference": "로마서 2:4",
+            "verse": "혹 네가 하나님의 인자하심이 너를 인도하여 회개케 하심을 알지 못하여 그의 인자하심과 용납하심과 길이 참으심의 풍성함을 멸시하느뇨"
         }
     },
     {
@@ -51,12 +71,42 @@
     },
     {
         "english": {
+            "reference": "1 Timothy 6:15-16",
+            "verse": "which He will manifest in His own time, He who is the blessed and only Potentate, the King of kings and Lord of lords, who alone has immortality, dwelling in unapproachable light, whom no man has seen or can see, to whom be honor and everlasting power. Amen."
+        },
+        "korean": {
+            "reference": "디모데전서 6:15-16",
+            "verse": "기약이 이르면 하나님이 그의 나타나심을 보이시리니 하나님은 복되시고 홀로 한 분이신 능하신 자이며 만왕의 왕이시며 만주의 주시요 오직 그에게만 죽지 아니함이 있고 가까이 가지 못할 빛에 거하시고 아무 사람도 보지 못하였고 또 볼 수 없는 자시니 그에게 존귀와 영원한 능력을 돌릴지어다 아멘"
+        }
+    },
+    {
+        "english": {
             "reference": "2 Peter 1:21",
             "verse": "for prophecy never came by the will of man, but holy men of God spoke as they were moved by the Holy Spirit."
         },
         "korean": {
             "reference": "베드로후서 1:21",
             "verse": "예언은 언제든지 사람의 뜻으로 낸 것이 아니요 오직 성령의 감동하심을 입은 사람들이 하나님께 받아 말한 것임이니라"
+        }
+    },
+    {
+        "english": {
+            "reference": "Jeremiah 30:1-2",
+            "verse": "The word that came to Jeremiah from the LORD, saying, \"Thus speaks the LORD God of Israel, saying: 'Write in a book for yourself all the words that I have spoken to you."
+        },
+        "korean": {
+            "reference": "예레미야 30:1-2",
+            "verse": "여호와께로서 말씀이 예레미야에게 임하여 이르시니라 이스라엘의 하나님 여호와께서 이같이 일러 가라사대 내가 네게 이른 모든 말을 책에 기록하라"
+        }
+    },
+    {
+        "english": {
+            "reference": "2 Timothy 3:16-17",
+            "verse": "All Scripture is given by inspiration of God, and is profitable for doctrine, for reproof, for correction, for instruction in righteousness, that the man of God may be complete, thoroughly equipped for every good work."
+        },
+        "korean": {
+            "reference": "디모데후서 3:16-17",
+            "verse": "모든 성경은 하나님의 감동으로 된 것으로 교훈과 책망과 바르게 함과 의로 교육하기에 유익하니 이는 하나님의 사람으로 온전케 하며 모든 선한 일을 행하기에 온전케 하려 함이니라"
         }
     },
     {
