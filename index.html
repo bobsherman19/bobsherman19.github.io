@@ -579,8 +579,8 @@
             // Iterate through the correct words
             correctWords.forEach((word, index) => {
                 if (index < userWords.length) {
-                    // If the word matches, add it as is. If not, wrap in a span with red color
-                    highlightedVerse += word.toLowerCase() === userWords[index].toLowerCase() ? 
+                    // If the word matches exactly, including case, add it as is. If not, wrap in a span with red color
+                    highlightedVerse += word === userWords[index] ? 
                         word + ' ' : 
                         `<span style="color: red;">${word}</span> `;
                 } else {
@@ -589,8 +589,16 @@
                 }
             });
         
+            // Handle case where user input is longer than the correct verse
+            if (userWords.length > correctWords.length) {
+                userWords.slice(correctWords.length).forEach(word => {
+                    highlightedVerse += `<span style="color: red;">${word}</span> `;
+                });
+            }
+        
             return highlightedVerse.trim();
         }
+        
         
 
         function resetPracticeMode() {
