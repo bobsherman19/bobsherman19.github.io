@@ -335,17 +335,15 @@
             });
         }
 
-
-
-
         function checkAnswers() {
             const inputs = document.querySelectorAll('input[data-answer]');
             let correctCount = 0;
-
+        
             inputs.forEach(input => {
-                const userAnswer = input.value.trim().toLowerCase();
-                const correctAnswer = input.getAttribute('data-answer').trim().toLowerCase();
-
+                // Compare answers with respect to case sensitivity
+                const userAnswer = input.value.trim();
+                const correctAnswer = input.getAttribute('data-answer').trim();
+        
                 if (userAnswer === correctAnswer) {
                     correctCount++;
                     input.classList.add('correct');
@@ -355,10 +353,11 @@
                     input.classList.remove('correct');
                 }
             });
-
+        
             // Display the number of correct answers in the feedback area
             document.getElementById('feedback').innerText = `You got ${correctCount} out of ${inputs.length} right!`;
         }
+        
 
         function loadNewVerse() {
             // Get a new random verse
@@ -530,8 +529,8 @@
             const fullVerse = currentVerse[currentLanguage].verse.trim();
             const userInput = userVerseInput.value.trim();
         
-            // Check if the user's input matches the full verse exactly
-            if (userInput.toLowerCase() === fullVerse.toLowerCase()) {
+            // Check if the user's input matches the full verse exactly, respecting case sensitivity
+            if (userInput === fullVerse) {
                 userVerseInput.classList.add('correct');
                 userVerseInput.classList.remove('incorrect');
                 document.getElementById('feedback').innerText = 'Correct! Well done.';
@@ -546,6 +545,7 @@
                 document.getElementById('fullVerse').style.display = 'block';
             }
         }
+        
         
         function highlightDifferences(userInput, correctVerse) {
             let highlightedVerse = '';
