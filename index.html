@@ -125,6 +125,7 @@
         <button onclick="loadNewVerse()" id="loadNewVerseButton">New Verse ></button>
         <button onclick="toggleLanguage()" style="background-color: pink;" id="toggleLanguage">Toggle Language (ENG/KOR)</button>
         <button onclick="enableFullVersePractice()" id="practiceFullVerseButton" style="background-color: #4CAF50;">Practice Full Verse</button>
+        <button onclick="exportVerses()" style="background-color: #6495ED;">Export Verses</button>
     </div>
 
     <script>
@@ -176,8 +177,31 @@
             dropdown.selectedIndex = 0; // Ensure first option is selected
             selectVerse(); // Display the first verse after populating the dropdown
         }
-
-
+        
+        function exportVerses() {
+            let exportText = '';
+            versesList.forEach((verse, index) => {
+                // Replace verse reference with a generic label
+                exportText += 'Verse ' + (index + 1) + ': (                          )\n';
+                // Generate text with blanks
+                if (currentLanguage === 'english') {
+                    exportText += blankOutWordsRandomlyENG(verse[currentLanguage].verse).replace(/<input type="text" data-answer="(.+?)" style="width:100px;">/g, '____') + '\n\n';
+                } else {
+                    exportText += blankOutWordsRandomlyKOR(verse[currentLanguage].verse).replace(/<input type="text" data-answer="(.+?)" style="width:100px;">/g, '____') + '\n\n';
+                }
+            });
+        
+            // Trigger download
+            const element = document.createElement('a');
+            const file = new Blob([exportText], {type: 'text/plain'});
+            element.href = URL.createObjectURL(file);
+            element.download = "exported_verses.txt";
+            document.body.appendChild(element); // Required for this to work in FireFox
+            element.click();
+            document.body.removeChild(element);
+        }
+        
+    
         function selectVerse() {
             const dropdown = document.getElementById('verseSelector');
             const selectedIndex = dropdown.value;
