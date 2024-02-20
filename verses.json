@@ -111,12 +111,62 @@
     },
     {
         "english": {
-            "reference": "Romans 1:20",
-            "verse": "For since the creation of the world His invisible attributes are clearly seen, being understood by the things that are made, even His eternal power and Godhead, so that they are without excuse,"
+            "reference": "Revelation 22:17-19",
+            "verse": "And the Spirit and the bride say, \"Come!\" And let him who hears say, \"Come!\" And let him who thirsts come. Whoever desires, let him take the water of life freely. For I testify to everyone who hears the words of the prophecy of this book: If anyone adds to these things, God will add to him the plagues that are written in this book; and if anyone takes away from the words of the book of this prophecy, God shall take away his part from the Book of Life, from the holy city, and from the things which are written in this book."
         },
         "korean": {
-            "reference": "로마서 1:20",
-            "verse": "창세로부터 그의 보이지 아니하는 것들 곧 그의 영원하신 능력과 신성이 그 만드신 만물에 분명히 보여 알게 되나니 그러므로 저희가 핑계치 못할지니라"
+            "reference": "요한계시록 22:17-19",
+            "verse": "성령과 신부가 말씀하시기를 오라 하시는도다 듣는 자도 오라 할 것이요 목마른 자도 올 것이요 또 원하는 자는 값없이 생명수를 받으라 하시더라 내가 이 책의 예언의 말씀을 듣는 각인에게 증거하노니 만일 누구든지 이것들 외에 더하면 하나님이 이 책에 기록된 재앙들을 그에게 더하실 터이요 만일 누구든지 이 책의 예언의 말씀에서 제하여 버리면 하나님이 이 책에 기록된 생명나무와 및 거룩한 성에 참여함을 제하여 버리시리라"
+        }
+    },
+    {
+        "english": {
+            "reference": "Genesis 1:1",
+            "verse": "In the beginning God created the heavens and the earth."
+        },
+        "korean": {
+            "reference": "창세기 1:1",
+            "verse": "태초에 하나님이 천지를 창조하시니라"
+        }
+    },
+    {
+        "english": {
+            "reference": "Genesis 1:2",
+            "verse": "The earth was without form, and void; and darkness was on the face of the deep. And the Spirit of God was hovering over the face of the waters."
+        },
+        "korean": {
+            "reference": "창세기 1:2",
+            "verse": "땅이 혼돈하고 공허하며 흑암이 깊음 위에 있고 하나님의 신은 수면에 운행하시니라"
+        }
+    },
+    {
+        "english": {
+            "reference": "Genesis 1:11-12",
+            "verse": "Then God said, \"Let the earth bring forth grass, the herb that yields seed, and the fruit tree that yields fruit according to its kind, whose seed is in itself, on the earth\"; and it was so. And the earth brought forth grass, the herb that yields seed according to its kind, and the tree that yields fruit, whose seed is in itself according to its kind. And God saw that it was good."
+        },
+        "korean": {
+            "reference": "창세기 1:11-12",
+            "verse": "하나님이 가라사대 땅은 풀과 씨 맺는 채소와 각기 종류대로 씨 가진 열매 맺는 과목을 내라 하시매 그대로 되어 땅이 풀과 각기 종류대로 씨 맺는 채소와 각기 종류대로 씨 가진 열매 맺는 나무를 내니 하나님의 보시기에 좋았더라"
+        }
+    },
+    {
+        "english": {
+            "reference": "Genesis 1:20-25",
+            "verse": "Then God said, \"Let the waters abound with an abundance of living creatures, and let birds fly above the earth across the face of the firmament of the heavens.\" So God created great sea creatures and every living thing that moves, with which the waters abounded, according to their kind, and every winged bird according to its kind. And God saw that it was good. And God blessed them, saying, \"Be fruitful and multiply, and fill the waters in the seas, and let birds multiply on the earth.\" So the evening and the morning were the fifth day. Then God said, \"Let the earth bring forth the living creature according to its kind: cattle and creeping thing and beast of the earth, each according to its kind\"; and it was so. And God made the beast of the earth according to its kind, cattle according to its kind, and everything that creeps on the earth according to its kind. And God saw that it was good."
+        },
+        "korean": {
+            "reference": "창세기 1:20-25",
+            "verse": "하나님이 가라사대 물들은 생물로 번성케 하라 땅 위 하늘의 궁창에는 새가 날으라 하시고 하나님이 큰 물고기와 물에서 번성하여 움직이는 모든 생물을 그 종류대로, 날개 있는 모든 새를 그 종류대로 창조하시니 하나님의 보시기에 좋았더라 하나님이 그들에게 복을 주어 가라사대 생육하고 번성하여 여러 바다 물에 충만하라 새들도 땅에 번성하라 하시니라 저녁이 되며 아침이 되니 이는 다섯째 날이니라 하나님이 가라사대 땅은 생물을 그 종류대로 내되 육축과 기는 것과 땅의 짐승을 종류대로 내라 하시고 (그대로 되니라) 하나님이 땅의 짐승을 그 종류대로, 육축을 그 종류대로, 땅에 기는 모든 것을 그 종류대로 만드시니 하나님의 보시기에 좋았더라"
+        }
+    },
+    {
+        "english": {
+            "reference": "Romans 1:19-20",
+            "verse": "because what may be known of God is manifest in them, for God has shown it to them. For since the creation of the world His invisible attributes are clearly seen, being understood by the things that are made, even His eternal power and Godhead, so that they are without excuse,"
+        },
+        "korean": {
+            "reference": "로마서 1:19-20",
+            "verse": "이는 하나님을 알 만한 것이 저희 속에 보임이라 하나님께서 이를 저희에게 보이셨느니라 창세로부터 그의 보이지 아니하는 것들 곧 그의 영원하신 능력과 신성이 그 만드신 만물에 분명히 보여 알게 되나니 그러므로 저희가 핑계치 못할지니라"
         }
     },
     {
@@ -127,6 +177,26 @@
         "korean": {
             "reference": "히브리서 3:4",
             "verse": "집마다 지은 이가 있으니 만물을 지으신 이는 하나님이시라"
+        }
+    },
+    {
+        "english": {
+            "reference": "Psalms 19:1-4",
+            "verse": "The heavens declare the glory of God; And the firmament shows His handiwork. Day unto day utters speech, And night unto night reveals knowledge. There is no speech nor language Where their voice is not heard. Their line has gone out through all the earth, And their words to the end of the world. In them He has set a tabernacle for the sun,"
+        },
+        "korean": {
+            "reference": "시편 19:1-4",
+            "verse": "하늘이 하나님의 영광을 선포하고 궁창이 그 손으로 하신 일을 나타내는도다 날은 날에게 말하고 밤은 밤에게 지식을 전하니 언어가 없고 들리는 소리도 없으나 그 소리가 온 땅에 통하고 그 말씀이 세계 끝까지 이르도다 하나님이 해를 위하여 하늘에 장막을 베푸셨도다"
+        }
+    },
+    {
+        "english": {
+            "reference": "Isaiah 40:26",
+            "verse": "Lift up your eyes on high, And see who has created these things, Who brings out their host by number; He calls them all by name, By the greatness of His might And the strength of His power; Not one is missing."
+        },
+        "korean": {
+            "reference": "이사야 40:26",
+            "verse": "너희는 눈을 높이 들어 누가 이 모든 것을 창조하였나 보라 주께서는 수효대로 만상을 이끌어 내시고 각각 그 이름을 부르시나니 그의 권세가 크고 그의 능력이 강하므로 하나도 빠짐이 없느니라"
         }
     },
     {
